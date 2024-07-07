@@ -8,11 +8,12 @@ camera_matrix = np.array([[800, 0, 320],
 dist_coeffs = np.zeros((4, 1))  # 왜곡이 없다고 가정
 
 # QR 코드의 월드 좌표 정의 (10x10 cm 크기)
+qr_size = 3.5
 world_points = np.array([
     [0, 0, 0],
-    [3.5, 0, 0],
-    [3.5, 3.5, 0],
-    [0, 3.5, 0]
+    [qr_size, 0, 0],
+    [qr_size, qr_size, 0],
+    [0, qr_size, 0]
 ], dtype=np.float32)
 
 # 카메라 캡처 설정
