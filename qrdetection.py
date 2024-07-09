@@ -2,10 +2,11 @@ import cv2
 import numpy as np
 
 # 카메라 매트릭스 및 왜곡 계수 (예시 값, 실제 값 사용)
-camera_matrix = np.array([[800, 0, 320],
-                          [0, 800, 240],
+camera_matrix = np.array([[685.743002, 0, 354.820686],
+                          [0, 691.365535, 226.926372],
                           [0, 0, 1]], dtype=np.float32)
-dist_coeffs = np.zeros((4, 1))  # 왜곡이 없다고 가정
+dist_coeffs = np.array([-0.374352, 0.081275, 0.000314, -0.002013, 0.000000])  # 왜곡이 없다고 가정
+
 
 # QR 코드의 월드 좌표 정의 (10x10 cm 크기)
 qr_size = 3.5
