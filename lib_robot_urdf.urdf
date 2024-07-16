@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 <robot name="lib_robot">
 
+<!-- Useful URDF visualization web : https://mymodelrobot.appspot.com/-->
   <!-- 링크 정의 -->
   <link name="base_link">
     <visual>
       <geometry>
-        <box size="0.4 0.4 0.12"/> <!-- 차체 크기 -->
+        <box size="0.4 0.4 0.128"/> <!-- 차체 크기 -->
       </geometry>
       <material name="grey">
         <color rgba="0.5 0.5 0.5 1.0"/>
@@ -57,6 +58,28 @@
       </visual>
   </link>
 
+  <link name="lidar">
+    <visual>
+      <geometry>
+        <cylinder radius="0.03675" length="0.043"/> <!-- LIDAR 크기 -->
+      </geometry>
+      <material name="green">
+        <color rgba="0 1 0 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <link name="lidar_holder">
+    <visual>
+      <geometry>
+        <cylinder radius="0.03925" length="0.012"/> <!-- LIDAR holder 크기 -->
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 1.0"/>
+      </material>
+    </visual>
+  </link>
+
   <!-- 조인트 정의 -->
   <joint name="left_wheel_joint" type="revolute">
     <parent link="base_link"/>
@@ -84,4 +107,15 @@
     <origin xyz="-0.165 -0.1 -0.0895" rpy="1.570796 0 0"/> <!-- 오른쪽 캐스터 위치 -->
   </joint>
 
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar"/>
+    <origin xyz="-0.125 0 0.0973" rpy="0 0 0"/> <!-- LIDAR 위치 -->
+  </joint>
+
+  <joint name="lidar_holder_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_holder"/>
+    <origin xyz="-0.125 0 0.07" rpy="0 0 0"/> <!-- LIDAR holder 위치 -->
+  </joint>
 </robot>
