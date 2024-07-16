@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<robot name="lib_robot">
+
+  <!-- 링크 정의 -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.4 0.4 0.12"/> <!-- 차체 크기 -->
+      </geometry>
+      <material name="grey">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <link name="left_wheel">
+    <visual>
+      <geometry>
+        <cylinder radius="0.0645" length="0.04"/> <!-- 왼쪽 바퀴 크기 -->
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <link name="right_wheel">
+    <visual>
+      <geometry>
+        <cylinder radius="0.0645" length="0.04"/> <!-- 오른쪽 바퀴 크기 -->
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <link name="left_caster">
+      <visual>
+      <geometry>
+          <cylinder radius="0.02" length="0.02"/> <!-- 왼쪽 캐스터 크기 -->
+      </geometry>
+      <material name="blue">
+          <color rgba="0 0 1 1.0"/>
+      </material>
+      </visual>
+  </link>
+
+  <link name="right_caster">
+      <visual>
+      <geometry>
+          <cylinder radius="0.02" length="0.02"/> <!-- 오른쪽 캐스터 크기 -->
+      </geometry>
+      <material name="blue">
+          <color rgba="0 0 1 1.0"/>
+      </material>
+      </visual>
+  </link>
+
+  <!-- 조인트 정의 -->
+  <joint name="left_wheel_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="left_wheel"/>
+    <origin xyz="0.08 0.168 -0.045" rpy="1.570796 0 0"/> <!-- 왼쪽 바퀴 위치 -->
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <joint name="right_wheel_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="right_wheel"/>
+    <origin xyz="0.08 -0.168 -0.045" rpy="1.570796 0 0"/> <!-- 오른쪽 바퀴 위치 -->
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <joint name="left_caster_joint" type="floating">
+    <parent link="base_link"/>
+    <child link="left_caster"/>
+    <origin xyz="-0.165 0.1 -0.0895" rpy="1.570796 0 0"/> <!-- 왼쪽 캐스터 위치 -->
+  </joint>
+
+  <joint name="right_caster_joint" type="floating">
+    <parent link="base_link"/>
+    <child link="right_caster"/>
+    <origin xyz="-0.165 -0.1 -0.0895" rpy="1.570796 0 0"/> <!-- 오른쪽 캐스터 위치 -->
+  </joint>
+
+</robot>
