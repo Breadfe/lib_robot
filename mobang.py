@@ -79,13 +79,22 @@ class Manipulator:
     def setDefault(self):
         pos = [None] * 6
         for DXL_ID in self.motors:
-            dxl_present_position, dxl_comm_result, dxl_error = self.acketHandler.read4ByteTxRx(portHandler, DXL_ID, self.addr_present_position)
+            dxl_present_position, dxl_comm_result, dxl_error = self.packetHandler.read4ByteTxRx(portHandler, DXL_ID, self.addr_present_position)
             pos[DXL_ID-1] = dxl_present_position
 
         for index, i in enumerate(self.motors):
             self.syncAdd(i, pos[index])
         self.groupSyncWrite.txPacket()
         self.groupSyncWrite.clearParam()
+    
+    def teaching_way_point(self, waypoint):
+        pos = self.posRead()
+        waypoint.append(pos)
+        pass  
+
+    def waypointplay(self, waypoint):
+        pos = waypoint.pop(0)
+        self.moveTo(pos)
 
 # Control table address
 # Control table address is different in Dynamixel model
@@ -152,14 +161,60 @@ else:
     quit()
 
 if __name__ == '__main__':
+    import os
     teacher = Manipulator(MX_ADDR_LIST, MX_LEN_LIST, MX_PROTOCOL, MX_DXL)
-    student = Manipulator(XM_ADDR_LIST, XM_LEN_LIST, XM_PROTOCOL, XM_DXL)
+    # student = Manipulator(XM_ADDR_LIST, XM_LEN_LIST, XM_PROTOCOL, XM_DXL)
+    
+    # student.torque_on()
+    # print('student torque on. wait 5 sec')
+    # time.sleep(5)
 
-    student.torque_on()
-    time.sleep(5)
+    mode = int(input("select mode (1: real-time imitation, 2: period imitation): "))
 
-    while 1:
-        pos = teacher.posRead()
-        print(pos)
-        student.moveTo(pos)
-        time.sleep(0.001)
+    if mode==1:
+        teacher.packetHandler.write1ByteTxRx(portHandler, 17, teacher.addr_torque_enable, teacher.torque_enable)
+        teacher.packetHandler.write2ByteTxRx(portHandler, 17, 34, 150)
+        teacher.packetHandler.write2ByteTxRx(portHandler, 17, teacher.addr_goal_position, 2200)
+
+        while 1:
+            grip,_,_ = teacher.packetHandler.read2ByteTxRx(portHandler, 17, teacher.addr_present_position)
+            if (grip>2300):
+                print("grip")
+            else:
+                print("release")
+            pos = teacher.posRead()
+            print(pos, grip)
+            # student.moveTo(pos)
+            time.sleep(0.001)
+
+    elif mode==2:
+        waypoint = []
+        # 입력 받으면 반복해서 way point 가져오기
+        print("Enter your Teaching second : ")
+        teaching_second = int(input())
+        loop = int(teaching_second/0.01)
+        from threading import Thread
+        _thread = Thread(target=os.system, args=('python music.py', ))
+        _thread.start()
+        time.sleep(0.0001)
+        print("TRAIN START")
+        while _thread.is_alive():
+            teacher.teaching_way_point(waypoint)
+            time.sleep(0.001)
+
+        print('Way point saved : ', waypoint)
+        print('Wait for 5 second...')
+        
+        for _ in range(5):
+            print(f"{_}")
+            time.sleep(0.9)
+
+        _thread = Thread(target=os.system, args=('python music.py', ))
+        _thread.start()
+        while _thread.is_alive():
+            # student.waypointplay(waypoint)
+            time.sleep(0.001)
+
+        
+        print('done')
+
