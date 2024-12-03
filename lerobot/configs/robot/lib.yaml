@@ -1,0 +1,37 @@
+_target_: lerobot.common.robot_devices.robots.koch.KochRobot
+calibration_path: .cache/calibration/koch.pkl
+leader_arms:
+  main:
+    _target_: lerobot.common.robot_devices.motors.dynamixel.DynamixelMotorsBus
+    port: COM7
+    motors:
+      # name: (index, model)
+      shoulder_pan: [11, "mx-28at"]
+      shoulder_lift: [12, "mx-28at"]
+      elbow_flex: [13, "mx-28at"]
+      wrist_flex: [14, "mx-28at"]
+      wrist_roll: [15, "mx-28at"]
+      wrist: [16, "mx-28at"]
+      gripper: [17, "mx-28at"]
+follower_arms:
+  main:
+    _target_: lerobot.common.robot_devices.motors.dynamixel.DynamixelMotorsBus
+    port: COM6
+    motors:
+      # name: (index, model)
+      shoulder_pan: [1, "xm540-w270"]
+      shoulder_lift: [2, "xm540-w270"]
+      elbow_flex: [3, "xm540-w270"]
+      wrist_flex: [4, "xm540-w270"]
+      wrist_roll: [5, "xm540-w270"]
+      wrist: [6, "xm540-w270"]
+      gripper: [7, "xm540-w270"]
+cameras:
+  webcam:
+    _target_: lerobot.common.robot_devices.cameras.opencv.OpenCVCamera
+    camera_index: 1
+    fps: 30
+    width: 640
+    height: 480
+
+
