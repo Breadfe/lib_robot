@@ -16,7 +16,6 @@
 import logging
 import os
 import os.path as osp
-import platform
 import random
 from contextlib import contextmanager
 from datetime import datetime, timezone
@@ -27,12 +26,6 @@ import hydra
 import numpy as np
 import torch
 from omegaconf import DictConfig
-
-
-def none_or_int(value):
-    if value == "None":
-        return None
-    return int(value)
 
 
 def inside_slurm():
@@ -190,30 +183,3 @@ def print_cuda_memory_usage():
 
 def capture_timestamp_utc():
     return datetime.now(timezone.utc)
-
-
-def say(text, blocking=False):
-    # Check if mac, linux, or windows.
-    if platform.system() == "Darwin":
-        cmd = f'say "{text}"'
-        if not blocking:
-            cmd += " &"
-    elif platform.system() == "Linux":
-        cmd = f'spd-say "{text}"'
-        if blocking:
-            cmd += "  --wait"
-    elif platform.system() == "Windows":
-        # TODO(rcadene): Make blocking option work for Windows
-        cmd = (
-            'PowerShell -Command "Add-Type -AssemblyName System.Speech; '
-            f"(New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('{text}')\""
-        )
-
-    os.system(cmd)
-
-
-def log_say(text, play_sounds, blocking=False):
-    logging.info(text)
-
-    if play_sounds:
-        say(text, blocking)
