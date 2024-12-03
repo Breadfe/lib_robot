@@ -21,9 +21,9 @@ from PIL import Image
 from lerobot.common.robot_devices.utils import (
     RobotDeviceAlreadyConnectedError,
     RobotDeviceNotConnectedError,
-    busy_wait,
 )
 from lerobot.common.utils.utils import capture_timestamp_utc
+from lerobot.scripts.control_robot import busy_wait
 
 SERIAL_NUMBER_INDEX = 1
 
@@ -168,7 +168,6 @@ class IntelRealSenseCameraConfig:
     width: int | None = None
     height: int | None = None
     color_mode: str = "rgb"
-    channels: int | None = None
     use_depth: bool = False
     force_hardware_reset: bool = True
     rotation: int | None = None
@@ -179,8 +178,6 @@ class IntelRealSenseCameraConfig:
             raise ValueError(
                 f"`color_mode` is expected to be 'rgb' or 'bgr', but {self.color_mode} is provided."
             )
-
-        self.channels = 3
 
         at_least_one_is_not_none = self.fps is not None or self.width is not None or self.height is not None
         at_least_one_is_none = self.fps is None or self.width is None or self.height is None
@@ -257,7 +254,6 @@ class IntelRealSenseCamera:
         self.fps = config.fps
         self.width = config.width
         self.height = config.height
-        self.channels = config.channels
         self.color_mode = config.color_mode
         self.use_depth = config.use_depth
         self.force_hardware_reset = config.force_hardware_reset

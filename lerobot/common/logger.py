@@ -189,7 +189,7 @@ class Logger:
             training_state["scheduler"] = scheduler.state_dict()
         torch.save(training_state, save_dir / self.training_state_file_name)
 
-    def save_checkpoint(
+    def save_checkpont(
         self,
         train_step: int,
         policy: Policy,

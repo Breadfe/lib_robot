@@ -35,7 +35,7 @@
 
         <ul>
             <li>
-                Number of samples/frames: {{ dataset_info.num_frames }}
+                Number of samples/frames: {{ dataset_info.num_samples }}
             </li>
             <li>
                 Number of episodes: {{ dataset_info.num_episodes }}
@@ -250,7 +250,7 @@
                     if(!canPlayVideos){
                         this.videoCodecError = true;
                     }
-
+                    
                     // process CSV data
                     this.videos = document.querySelectorAll('video');
                     this.video = this.videos[0];
