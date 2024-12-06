@@ -29,7 +29,7 @@ URL_TEMPLATE = (
 
 # The following positions are provided in nominal degree range ]-180, +180[
 # For more info on these constants, see comments in the code where they get used.
-ZERO_POSITION_DEGREE = 0
+ZERO_POSITION_DEGREE = 180
 ROTATED_POSITION_DEGREE = 90
 
 
@@ -153,7 +153,7 @@ def ensure_safe_goal_position(
     safe_diff = torch.maximum(safe_diff, -max_relative_target)
     safe_goal_pos = present_pos + safe_diff
 
-    if not torch.allclose(goal_pos, safe_goal_pos):
+    if not torch.allclose(goal_pos, safe_goal_pos.int()):
         logging.warning(
             "Relative goal position magnitude had to be clamped to be safe.\n"
             f"  requested relative goal position target: {diff}\n"
@@ -374,7 +374,7 @@ class ManipulatorRobot:
         for name in self.leader_arms:
             self.leader_arms[name].write("Torque_Enable", TorqueMode.DISABLED.value)
 
-        self.activate_calibration()
+        # self.activate_calibration()
 
         # Set robot preset (e.g. torque in leader gripper for Koch v1.1)
         if self.robot_type == "koch":

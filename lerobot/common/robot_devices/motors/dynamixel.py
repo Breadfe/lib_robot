@@ -24,7 +24,7 @@ from lerobot.common.robot_devices.utils import RobotDeviceAlreadyConnectedError,
 from lerobot.common.utils.utils import capture_timestamp_utc
 
 PROTOCOL_VERSION = 2.0
-BAUDRATE = 1_000_000
+BAUDRATE = 4_000_000
 TIMEOUT_MS = 1000
 
 MAX_ID_RANGE = 252
@@ -129,6 +129,7 @@ MODEL_CONTROL_TABLE = {
     "xm430-w350": X_SERIES_CONTROL_TABLE,
     "xm540-w270": X_SERIES_CONTROL_TABLE,
     "xc430-w150": X_SERIES_CONTROL_TABLE,
+    "mx-28at": X_SERIES_CONTROL_TABLE,
 }
 
 MODEL_RESOLUTION = {
@@ -139,6 +140,7 @@ MODEL_RESOLUTION = {
     "xm430-w350": 4096,
     "xm540-w270": 4096,
     "xc430-w150": 4096,
+    "mx-28at": 4096,
 }
 
 MODEL_BAUDRATE_TABLE = {
@@ -149,6 +151,7 @@ MODEL_BAUDRATE_TABLE = {
     "xm430-w350": X_SERIES_BAUDRATE_TABLE,
     "xm540-w270": X_SERIES_BAUDRATE_TABLE,
     "xc430-w150": X_SERIES_BAUDRATE_TABLE,
+    "mx-28at": X_SERIES_BAUDRATE_TABLE,
 }
 
 NUM_READ_RETRY = 10

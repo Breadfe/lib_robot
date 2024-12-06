@@ -726,7 +726,7 @@ if __name__ == "__main__":
     base_parser.add_argument(
         "--robot-path",
         type=str,
-        default="lerobot/configs/robot/koch.yaml",
+        default="lerobot/configs/robot/lib.yaml",
         help="Path to robot yaml file used to instantiate the robot using `make_robot` factory function.",
     )
     base_parser.add_argument(
@@ -746,12 +746,18 @@ if __name__ == "__main__":
 
     parser_teleop = subparsers.add_parser("teleoperate", parents=[base_parser])
     parser_teleop.add_argument(
-        "--fps", type=none_or_int, default=None, help="Frames per second (set to None to disable)"
+        "--fps", 
+        type=none_or_int, 
+        default=None, 
+        help="Frames per second (set to None to disable)"
     )
 
     parser_record = subparsers.add_parser("record", parents=[base_parser])
     parser_record.add_argument(
-        "--fps", type=none_or_int, default=None, help="Frames per second (set to None to disable)"
+        "--fps", 
+        type=none_or_int, 
+        default=None, 
+        help="Frames per second (set to None to disable)"
     )
     parser_record.add_argument(
         "--root",
@@ -783,7 +789,12 @@ if __name__ == "__main__":
         default=60,
         help="Number of seconds for resetting the environment after each episode.",
     )
-    parser_record.add_argument("--num-episodes", type=int, default=50, help="Number of episodes to record.")
+    parser_record.add_argument(
+        "--num-episodes", 
+        type=int, 
+        default=50, 
+        help="Number of episodes to record."
+    )
     parser_record.add_argument(
         "--run-compute-stats",
         type=int,
