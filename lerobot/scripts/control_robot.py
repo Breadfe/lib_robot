@@ -310,7 +310,7 @@ def record(
     robot: Robot,
     policy: torch.nn.Module | None = None,
     hydra_cfg: DictConfig | None = None,
-    fps: float | None = None,
+    fps: int | None = None,
     root="data",
     repo_id="lerobot/debug",
     warmup_time_s=2,
@@ -749,7 +749,7 @@ if __name__ == "__main__":
     parser_teleop.add_argument(
         "--fps", 
         type=none_or_int, 
-        default=30, 
+        default=60, 
         help="Frames per second (set to None to disable)"
     )
 
@@ -757,7 +757,7 @@ if __name__ == "__main__":
     parser_record.add_argument(
         "--fps", 
         type=none_or_int, 
-        default=30, 
+        default=60, 
         help="Frames per second (set to None to disable)"
     )
     parser_record.add_argument(
@@ -793,7 +793,7 @@ if __name__ == "__main__":
     parser_record.add_argument(
         "--num-episodes", 
         type=int, 
-        default=50, 
+        default=5, 
         help="Number of episodes to record."
     )
     parser_record.add_argument(
