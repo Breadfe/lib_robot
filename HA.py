@@ -19,7 +19,7 @@ world_points = np.array([
 ], dtype=np.float32)
 
 # 카메라 캡처 설정
-cap = cv2.VideoCapture(0)  # 0번 카메라 (웹캠)
+cap = cv2.VideoCapture(1)  # 0번 카메라 (웹캠)
 
 if not cap.isOpened():
     print("카메라를 열 수 없습니다.")
@@ -28,7 +28,7 @@ if not cap.isOpened():
 detector = cv2.QRCodeDetector()
 
 # CSV 파일 초기화
-csv_file_path = "C:/Users/82108/Desktop/2024_ugrp/save_qr_code_info.csv"
+csv_file_path = "save_qr_code_info.csv"
 file_exists = os.path.isfile(csv_file_path)
 with open(csv_file_path, 'a', newline='') as csvfile:
     fieldnames = ['Title', 'Author', 'ISBN', 'X', 'Y', 'Z']
