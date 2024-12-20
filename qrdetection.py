@@ -18,7 +18,7 @@ world_points = np.array([
 ], dtype=np.float32)
 
 # 카메라 캡처 설정
-cap = cv2.VideoCapture(0)  # 0번 카메라 (웹캠)
+cap = cv2.VideoCapture(1)  # 0번 카메라 (웹캠)
 def print_hi():
     print("Hi")
 if not cap.isOpened():

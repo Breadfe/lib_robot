@@ -14,10 +14,10 @@ book_info = [# "Title: Deep Learning\nAuthor: Ian Goodfellow\nISBN: 978026203561
 
 # QR 코드 생성
 qr = qrcode.QRCode(
-    version=1,
+    version=3,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
     box_size=10,
-    border=4,
+    border=3,
 )
 
 for idx, data in enumerate(book_info):
