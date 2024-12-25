@@ -20,7 +20,7 @@ world_points = np.array([
 
 
 # CSV 파일 설정 -> 여기수정
-csv_file_path = "C:/Users/82108/Desktop/2024_ugrp/save_qr_code_info_20241223.csv"
+csv_file_path = "save_qr_code_info_20241225.csv"
 fieldnames = ["Title", "Author", "ISBN", "X", "Y", "Z"]
 
 # CSV 파일 생성
