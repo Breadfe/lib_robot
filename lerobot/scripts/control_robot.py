@@ -668,7 +668,7 @@ def record(
         info=info,
         videos_dir=videos_dir,
     )
-    run_compute_stats=False
+    # run_compute_stats=False
     if run_compute_stats:
         logging.info("Computing dataset statistics")
         say("Computing dataset statistics")

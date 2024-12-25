@@ -3,7 +3,7 @@ _target_: lerobot.common.robot_devices.robots.manipulator.ManipulatorRobot
 leader_arms:
   main:
     _target_: lerobot.common.robot_devices.motors.dynamixel.DynamixelMotorsBus
-    port: COM4
+    port: COM3
     motors:
       # name: (index, model)
       shoulder_pan: [11, "mx-28at"]
@@ -16,7 +16,7 @@ leader_arms:
 follower_arms:
   main:
     _target_: lerobot.common.robot_devices.motors.dynamixel.DynamixelMotorsBus
-    port: COM3
+    port: COM4
     motors:
       # name: (index, model)
       shoulder_pan: [1, "xm540-w270"]
