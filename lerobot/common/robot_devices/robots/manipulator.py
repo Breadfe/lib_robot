@@ -511,6 +511,17 @@ class ManipulatorRobot:
                 stacklevel=1,
             )
 
+    def syncro(self):
+        for name in self.follower_arms:
+            present_pos = self.follower_arms[name].read("Present_Position")
+            goal_pos = self.leader_arms[name].read("Present_Position")
+        rms = np.linalg.norm(goal_pos-present_pos)/len(self.follower_arms[name].motors)
+        if rms < 40:
+            return True
+        else: 
+            print(rms)
+            return False
+
     def teleop_step(
         self, record_data=False
     ) -> None | tuple[dict[str, torch.Tensor], dict[str, torch.Tensor]]:
@@ -543,15 +554,11 @@ class ManipulatorRobot:
 
             # Used when record_data=True
             follower_goal_pos[name] = goal_pos
-            rms = np.linalg.norm(goal_pos-present_pos)/len(self.follower_arms[name].motors)
             
-            # diff = goal_pos-present_pos
-            if rms < 30:
-                goal_pos = goal_pos.numpy().astype(np.int32)
-                self.follower_arms[name].write("Goal_Position", goal_pos)
-                self.logs[f"write_follower_{name}_goal_pos_dt_s"] = time.perf_counter() - before_fwrite_t
-            else:
-                print(rms, end=" ")
+            goal_pos = goal_pos.numpy().astype(np.int32)
+            self.follower_arms[name].write("Goal_Position", goal_pos)
+            self.logs[f"write_follower_{name}_goal_pos_dt_s"] = time.perf_counter() - before_fwrite_t
+            
         # Early exit when recording data is not requested
         if not record_data:
             return
@@ -564,6 +571,14 @@ class ManipulatorRobot:
             follower_pos[name] = self.follower_arms[name].read("Present_Position")
             follower_pos[name] = torch.from_numpy(follower_pos[name])
             self.logs[f"read_follower_{name}_pos_dt_s"] = time.perf_counter() - before_fread_t
+
+        #Read follower current
+        # follower_cur = {}
+        # for name in self.follower_arms:
+        #     before_fread_t = time.perf_counter()
+        #     follower_cur[name] = self.follower_arms[name].read("Present_Current")
+        #     follower_cur[name] = torch.from_numpy(follower_cur[name])
+        #     self.logs[f"read_follower_{name}_cur_dt_s"] = time.perf_counter() - before_fread_t
 
         # Create state by concatenating follower current position
         state = []

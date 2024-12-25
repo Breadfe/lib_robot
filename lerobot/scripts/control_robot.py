@@ -290,6 +290,9 @@ def teleoperate(robot: Robot, fps: int | None = None, teleop_time_s: float | Non
     if not robot.is_connected:
         robot.connect()
 
+    while not robot.syncro():
+        time.sleep(0.1)
+
     start_teleop_t = time.perf_counter()
     while True:
         start_loop_t = time.perf_counter()
@@ -409,6 +412,8 @@ def record(
         # override fps using policy fps
         fps = hydra_cfg.env.fps
 
+    
+
     # Execute a few seconds without recording data, to give times
     # to the robot devices to connect and start synchronizing.
     timestamp = 0
@@ -448,6 +453,8 @@ def record(
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_image_writers) as executor:
         # Start recording all episodes
         while episode_index < num_episodes:
+            while not robot.syncro():
+                time.sleep(0.1)
             logging.info(f"Recording episode {episode_index}")
             say(f"Recording episode {episode_index}")
             ep_dict = {}
@@ -661,6 +668,7 @@ def record(
         info=info,
         videos_dir=videos_dir,
     )
+    run_compute_stats=False
     if run_compute_stats:
         logging.info("Computing dataset statistics")
         say("Computing dataset statistics")
@@ -749,7 +757,7 @@ if __name__ == "__main__":
     parser_teleop.add_argument(
         "--fps", 
         type=none_or_int, 
-        default=60, 
+        default=30, 
         help="Frames per second (set to None to disable)"
     )
 
@@ -769,7 +777,7 @@ if __name__ == "__main__":
     parser_record.add_argument(
         "--repo-id",
         type=str,
-        default="lerobot/test",
+        default="nutri36/ugrp2024",
         help="Dataset identifier. By convention it should match '{hf_username}/{dataset_name}' (e.g. `lerobot/test`).",
     )
     parser_record.add_argument(
@@ -855,7 +863,7 @@ if __name__ == "__main__":
     parser_replay.add_argument(
         "--repo-id",
         type=str,
-        default="lerobot/test",
+        default="nutri36/ugrp2024",
         help="Dataset identifier. By convention it should match '{hf_username}/{dataset_name}' (e.g. `lerobot/test`).",
     )
     parser_replay.add_argument("--episode", type=int, default=0, help="Index of the episode to replay.")
