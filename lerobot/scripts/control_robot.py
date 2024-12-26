@@ -303,7 +303,7 @@ def teleoperate(robot: Robot, fps: int | None = None, teleop_time_s: float | Non
             busy_wait(1 / fps - dt_s)
 
         dt_s = time.perf_counter() - start_loop_t
-        log_control_info(robot, dt_s, fps=fps)
+        # log_control_info(robot, dt_s, fps=fps)
 
         if teleop_time_s is not None and time.perf_counter() - start_teleop_t > teleop_time_s:
             break
