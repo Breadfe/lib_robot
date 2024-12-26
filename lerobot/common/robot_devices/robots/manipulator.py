@@ -557,7 +557,15 @@ class ManipulatorRobot:
             
             goal_pos = goal_pos.numpy().astype(np.int32)
             self.follower_arms[name].write("Goal_Position", goal_pos)
-            self.logs[f"write_follower_{name}_goal_pos_dt_s"] = time.perf_counter() - before_fwrite_t
+            # self.logs[f"write_follower_{name}_goal_pos_dt_s"] = time.perf_counter() - before_fwrite_t
+
+        follower_cur = {}
+        for name in self.follower_arms:
+            before_fread_t = time.perf_counter()
+            follower_cur[name] = self.follower_arms[name].read("Present_Current")
+            follower_cur[name] = torch.from_numpy(follower_cur[name])
+            print(follower_cur[name])
+            # self.logs[f"read_follower_{name}_cur_dt_s"] = time.perf_counter() - before_fread_t
             
         # Early exit when recording data is not requested
         if not record_data:
