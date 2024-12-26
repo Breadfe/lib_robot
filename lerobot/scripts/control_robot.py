@@ -98,6 +98,7 @@ python lerobot/scripts/control_robot.py record \
 ```
 """
 
+
 import argparse
 import concurrent.futures
 import json
@@ -118,6 +119,11 @@ from omegaconf import DictConfig
 from PIL import Image
 from termcolor import colored
 
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
+torch.set_printoptions(linewidth=1000)
+from lerobot.common.policies.act.modeling_act import ACTPolicy
+
 # from safetensors.torch import load_file, save_file
 from lerobot.common.datasets.compute_stats import compute_stats
 from lerobot.common.datasets.lerobot_dataset import CODEBASE_VERSION, LeRobotDataset
@@ -137,8 +143,7 @@ from lerobot.scripts.push_dataset_to_hub import (
     push_videos_to_hub,
     save_meta_data,
 )
-# import sys
-# print(sys.path)
+
 ########################################################################################
 # Utilities
 ########################################################################################
@@ -412,7 +417,8 @@ def record(
         # override fps using policy fps
         fps = hydra_cfg.env.fps
 
-    
+    while not robot.syncro():
+        time.sleep(0.1)
 
     # Execute a few seconds without recording data, to give times
     # to the robot devices to connect and start synchronizing.
@@ -725,6 +731,52 @@ def replay(robot: Robot, episode: int, fps: int | None = None, root="data", repo
         dt_s = time.perf_counter() - start_episode_t
         log_control_info(robot, dt_s, fps=fps)
 
+def eval(robot: Robot):
+    inference_time_s = 120
+    fps = 30
+    device = "cuda"  # TODO: On Mac, use "mps" or "cpu"
+
+    ckpt_path = "outputs/train/real_world_act_default/checkpoints/last/pretrained_model"
+    policy = ACTPolicy.from_pretrained(ckpt_path)
+    policy.to(device)
+
+    if not robot.is_connected:
+        robot.connect()
+
+    for _ in range(inference_time_s * fps):
+        start_time = time.perf_counter()
+
+        # Read the follower state and access the frames from the cameras
+        observation = robot.capture_observation()
+
+        if not is_headless():
+            image_keys = [key for key in observation if "image" in key]
+            for key in image_keys:
+                cv2.imshow(key, cv2.cvtColor(observation[key].numpy(), cv2.COLOR_RGB2BGR))
+            cv2.waitKey(1)
+
+        # Convert to pytorch format: channel first and float32 in [0,1]
+        # with batch dimension
+        for name in observation:
+            if "image" in name:
+                observation[name] = observation[name].type(torch.float32) / 255
+                observation[name] = observation[name].permute(2, 0, 1).contiguous()
+            observation[name] = observation[name].unsqueeze(0)
+            observation[name] = observation[name].to(device)
+
+        # Compute the next action with the policy
+        # based on the current observation
+        action = policy.select_action(observation)
+        # Remove batch dimension
+        action = action.squeeze(0)
+        # Move to cpu, if not already the case
+        action = action.to("cpu")
+        # Order the robot to move
+        robot.send_action(action)
+        print(action)
+
+        dt_s = time.perf_counter() - start_time
+        busy_wait(1 / fps - dt_s)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -765,7 +817,7 @@ if __name__ == "__main__":
     parser_record.add_argument(
         "--fps", 
         type=none_or_int, 
-        default=60, 
+        default=30, 
         help="Frames per second (set to None to disable)"
     )
     parser_record.add_argument(
@@ -868,6 +920,8 @@ if __name__ == "__main__":
     )
     parser_replay.add_argument("--episode", type=int, default=0, help="Index of the episode to replay.")
 
+    parser_eval = subparsers.add_parser("eval", parents=[base_parser])
+
     args = parser.parse_args()
 
     init_logging()
@@ -906,6 +960,9 @@ if __name__ == "__main__":
 
     elif control_mode == "replay":
         replay(robot, **kwargs)
+
+    elif control_mode == "eval":
+        eval(robot)
 
     if robot.is_connected:
         # Disconnect manually to avoid a "Core dump" during process

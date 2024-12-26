@@ -1,3 +1,4 @@
 data/
 qr_code/
 outputs/
+__pycache__/

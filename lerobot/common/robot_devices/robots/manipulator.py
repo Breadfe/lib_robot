@@ -389,6 +389,11 @@ class ManipulatorRobot:
             print(f"Activating torque on {name} follower arm.")
             self.follower_arms[name].write("Torque_Enable", 1)
 
+        # Disable torque on all motors of the follower arms
+        # for name in self.follower_arms:
+        #     print(f"Activating torque off {name} follower arm.")
+        #     self.follower_arms[name].write("Torque_Enable", 0)
+
         if self.config.gripper_open_degree is not None:
             # Set the leader arm in torque mode with the gripper motor set to an angle. This makes it possible
             # to squeeze the gripper and have it spring back to an open position on its own.
@@ -557,14 +562,14 @@ class ManipulatorRobot:
             
             goal_pos = goal_pos.numpy().astype(np.int32)
             self.follower_arms[name].write("Goal_Position", goal_pos)
-            # self.logs[f"write_follower_{name}_goal_pos_dt_s"] = time.perf_counter() - before_fwrite_t
+            self.logs[f"write_follower_{name}_goal_pos_dt_s"] = time.perf_counter() - before_fwrite_t
 
-        follower_cur = {}
-        for name in self.follower_arms:
-            before_fread_t = time.perf_counter()
-            follower_cur[name] = self.follower_arms[name].read("Present_Current")
-            follower_cur[name] = torch.from_numpy(follower_cur[name])
-            print(follower_cur[name])
+        # follower_cur = {}
+        # for name in self.follower_arms:
+        #     before_fread_t = time.perf_counter()
+        #     follower_cur[name] = self.follower_arms[name].read("Present_Current")
+        #     follower_cur[name] = torch.from_numpy(follower_cur[name])
+        #     print(follower_cur[name])
             # self.logs[f"read_follower_{name}_cur_dt_s"] = time.perf_counter() - before_fread_t
             
         # Early exit when recording data is not requested

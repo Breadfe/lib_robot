@@ -201,6 +201,7 @@ def main():
         "--repo-id",
         type=str,
         required=True,
+        default="nutri36/ugrp2024",
         help="Name of hugging face repositery containing a LeRobotDataset dataset (e.g. `lerobot/pusht`).",
     )
     parser.add_argument(
