@@ -1,7 +1,7 @@
 # @package _global_
 
 seed: 1000
-dataset_repo_id: nutri36/cam3_lib
+dataset_repo_id: nutri36/midcam
 
 override_dataset_stats:
   observation.images.webcam:
