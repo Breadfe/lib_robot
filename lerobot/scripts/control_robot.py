@@ -736,7 +736,7 @@ def eval(robot: Robot):
     fps = 30
     device = "cuda"  # TODO: On Mac, use "mps" or "cpu"
 
-    ckpt_path = "outputs/train/real_world_act_default/checkpoints/last/pretrained_model"
+    ckpt_path = "outputs/train/ugrp2024/two_camera_test/checkpoints/last/pretrained_model"
     policy = ACTPolicy.from_pretrained(ckpt_path)
     policy.to(device)
 
@@ -829,7 +829,7 @@ if __name__ == "__main__":
     parser_record.add_argument(
         "--repo-id",
         type=str,
-        default="nutri36/ugrp2024",
+        default="nutri36/midcam",
         help="Dataset identifier. By convention it should match '{hf_username}/{dataset_name}' (e.g. `lerobot/test`).",
     )
     parser_record.add_argument(
@@ -853,7 +853,7 @@ if __name__ == "__main__":
     parser_record.add_argument(
         "--num-episodes", 
         type=int, 
-        default=5, 
+        default=10, 
         help="Number of episodes to record."
     )
     parser_record.add_argument(

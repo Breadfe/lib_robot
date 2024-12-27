@@ -259,7 +259,7 @@ class OpenCVCamera:
         if platform.system() == "Linux":
             self.camera = cv2.VideoCapture(f"/dev/video{self.camera_index}")
         else:
-            self.camera = cv2.VideoCapture(self.camera_index)
+            self.camera = cv2.VideoCapture(self.camera_index, cv2.CAP_DSHOW)
 
         if self.fps is not None:
             self.camera.set(cv2.CAP_PROP_FPS, self.fps)
