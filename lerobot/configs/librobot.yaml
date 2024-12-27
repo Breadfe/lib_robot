@@ -7,7 +7,8 @@ hydra:
   run:
     # Set `dir` to where you would like to save all of the run outputs. If you run another training session
     # with the same value for `dir` its contents will be overwritten unless you set `resume` to true.
-    dir: outputs/train/ugrp2024/midcam_camera_test
+    # dir: outputs/train/ugrp2024/midcam_camera_test #20241227:11:49 잘된거 1
+    dir: outputs/train/ugrp2024/mid_front_cam
   job:
     name: default
 
@@ -27,7 +28,7 @@ seed: ???
 # keys common between the datasets are kept. Each dataset gets and additional transform that inserts the
 # "dataset_index" into the returned item. The index mapping is made according to the order in which the
 # datsets are provided.
-dataset_repo_id: nutri36/midcam
+dataset_repo_id: default
 video_backend: pyav
 
 training:

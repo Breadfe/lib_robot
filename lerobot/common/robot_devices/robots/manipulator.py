@@ -526,6 +526,18 @@ class ManipulatorRobot:
         else: 
             print(rms)
             return False
+        
+    def move_to_origin(self):
+        dt = 100
+        origin_pos = torch.tensor([2048, 2560, 2048, 2048, 1536, 2048, 2048])
+        for name in self.follower_arms:
+            follower_pos = torch.from_numpy(self.follower_arms[name].read("Present_Position"))
+            dx = (origin_pos - follower_pos) / dt
+            for i in range(dt):
+                increment = dx * i
+                increment = increment.type(torch.int32)
+                self.follower_arms[name].write("Goal_Position", follower_pos + increment)
+                time.sleep(1/dt)
 
     def teleop_step(
         self, record_data=False
@@ -548,7 +560,6 @@ class ManipulatorRobot:
         for name in self.follower_arms:
             before_fwrite_t = time.perf_counter()
             goal_pos = leader_pos[name]
-            present_pos = self.follower_arms[name].read("Present_Position")
 
             # Cap goal position when too far away from present position.
             # Slower fps expected due to reading from the follower.

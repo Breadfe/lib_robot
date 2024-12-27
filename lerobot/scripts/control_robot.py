@@ -459,6 +459,7 @@ def record(
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_image_writers) as executor:
         # Start recording all episodes
         while episode_index < num_episodes:
+            robot.move_to_origin()
             while not robot.syncro():
                 time.sleep(0.1)
             logging.info(f"Recording episode {episode_index}")
@@ -736,12 +737,14 @@ def eval(robot: Robot):
     fps = 30
     device = "cuda"  # TODO: On Mac, use "mps" or "cpu"
 
-    ckpt_path = "outputs/train/ugrp2024/two_camera_test/checkpoints/last/pretrained_model"
+    ckpt_path = "outputs/train/ugrp2024/mid_front_cam/checkpoints/last/pretrained_model"
     policy = ACTPolicy.from_pretrained(ckpt_path)
     policy.to(device)
 
     if not robot.is_connected:
         robot.connect()
+
+    robot.move_to_origin()
 
     for _ in range(inference_time_s * fps):
         start_time = time.perf_counter()
@@ -829,7 +832,7 @@ if __name__ == "__main__":
     parser_record.add_argument(
         "--repo-id",
         type=str,
-        default="nutri36/midcam",
+        default="nutri36/test",
         help="Dataset identifier. By convention it should match '{hf_username}/{dataset_name}' (e.g. `lerobot/test`).",
     )
     parser_record.add_argument(
@@ -853,7 +856,7 @@ if __name__ == "__main__":
     parser_record.add_argument(
         "--num-episodes", 
         type=int, 
-        default=10, 
+        default=2, 
         help="Number of episodes to record."
     )
     parser_record.add_argument(
@@ -915,7 +918,7 @@ if __name__ == "__main__":
     parser_replay.add_argument(
         "--repo-id",
         type=str,
-        default="nutri36/ugrp2024",
+        default="nutri36/mid_front_cam",
         help="Dataset identifier. By convention it should match '{hf_username}/{dataset_name}' (e.g. `lerobot/test`).",
     )
     parser_replay.add_argument("--episode", type=int, default=0, help="Index of the episode to replay.")

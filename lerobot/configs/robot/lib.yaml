@@ -27,12 +27,12 @@ follower_arms:
       wrist: [6, "xm540-w270"]
       gripper: [7, "xm540-w270"]
 cameras:
-  # webcam:
-  #   _target_: lerobot.common.robot_devices.cameras.opencv.OpenCVCamera
-  #   camera_index: 1
-  #   fps: 30
-  #   width: 640
-  #   height: 480
+  webcam:
+    _target_: lerobot.common.robot_devices.cameras.opencv.OpenCVCamera
+    camera_index: 1
+    fps: 30
+    width: 640
+    height: 480
   # webcam2:
   #   _target_: lerobot.common.robot_devices.cameras.opencv.OpenCVCamera
   #   camera_index: 2
