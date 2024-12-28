@@ -8,7 +8,7 @@ hydra:
     # Set `dir` to where you would like to save all of the run outputs. If you run another training session
     # with the same value for `dir` its contents will be overwritten unless you set `resume` to true.
     # dir: outputs/train/ugrp2024/midcam_camera_test #20241227:11:49 잘된거 1
-    dir: outputs/train/ugrp2024/mid_front_cam
+    dir: outputs/train/ugrp2024/mid_top_cam_20k
   job:
     name: default
 
