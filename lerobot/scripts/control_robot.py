@@ -733,11 +733,11 @@ def replay(robot: Robot, episode: int, fps: int | None = None, root="data", repo
         log_control_info(robot, dt_s, fps=fps)
 
 def eval(robot: Robot):
-    inference_time_s = 120
+    inference_time_s = 40
     fps = 30
     device = "cuda"  # TODO: On Mac, use "mps" or "cpu"
 
-    ckpt_path = "outputs/train/ugrp2024/mid_top_cam_20k/checkpoints/last/pretrained_model"
+    ckpt_path = "outputs/train/ugrp2024/mid_top_putin_30k/checkpoints/last/pretrained_model"
     policy = ACTPolicy.from_pretrained(ckpt_path)
     policy.to(device)
 
@@ -832,7 +832,7 @@ if __name__ == "__main__":
     parser_record.add_argument(
         "--repo-id",
         type=str,
-        default="nutri36/mid_top_cam",
+        default="nutri36/mid_top_putin",
         help="Dataset identifier. By convention it should match '{hf_username}/{dataset_name}' (e.g. `lerobot/test`).",
     )
     parser_record.add_argument(

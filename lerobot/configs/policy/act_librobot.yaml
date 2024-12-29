@@ -1,7 +1,7 @@
 # @package _global_
 
 seed: 1000
-dataset_repo_id: nutri36/mid_top_cam
+dataset_repo_id: nutri36/mid_top_putin
 
 override_dataset_stats:
   # observation.images.webcam:
